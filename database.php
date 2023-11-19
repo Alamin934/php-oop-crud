@@ -41,8 +41,29 @@ class Database{
         }
     }
 
-    public function update(){
+    public function update($table, $params =[], $where=null){
+        if($this->tableExists($table)){
+            $args = [];
 
+            foreach($params as $key => $value){
+                $args[] = "$key = '{$value}'";
+            }
+            $arrToStr = implode(" , ", $args);
+            
+
+            $sql = "UPDATE $table SET $arrToStr";
+            if($where != null){
+                $sql.= " WHERE $where";
+            }
+
+            if($this->mysqli->query($sql)){
+                array_push($this->result, $this->mysqli->affected_rows);
+                return true;
+            }else{
+                array_push($this->result, $this->mysqli->error);
+                return false;
+            }
+        }
     }
 
     public function delete(){
