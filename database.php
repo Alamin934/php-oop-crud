@@ -26,8 +26,19 @@ class Database{
 
     }
 
-    public function insert(){
-
+    public function insert($table, $params =[]){
+        if($this->tableExists($table)){
+            $table_columns = implode(" , ", array_keys($params));
+            $table_values = implode("' , '", $params);
+            $sql = "INSERT INTO $table($table_columns) VALUES('$table_values')";
+            if($this->mysqli->query($sql)){
+                array_push($this->result, $this->mysqli->insert_id);
+                return true;
+            }else{
+                array_push($this->result, $this->mysqli->error);
+                return false;
+            }
+        }
     }
 
     public function update(){
@@ -40,6 +51,25 @@ class Database{
 
     public function select(){
 
+    }
+
+    private function tableExists($table){
+        $sql = "SHOW TABLES FROM $this->db_name LIKE '$table'";
+        $tableInDb = $this->mysqli->query($sql);
+
+        if($tableInDb){
+            if($tableInDb->num_rows == 1){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
+
+    public function get_result(){
+        $message = $this->result;
+        $this->result = [];
+        return $message;
     }
 
     public function __destruct(){
