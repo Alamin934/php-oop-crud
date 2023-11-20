@@ -14,10 +14,12 @@ $obj = new Database();
 // $obj->delete('users', 'user_id = "22"');
 
 // Show user by id
-$obj->sql('SELECT * FROM users');
+// $obj->sql('SELECT * FROM users');
+$obj->select('users', '*', null, null, 'user_name', '5');
+// $obj->select('users', '*', null, 'user_id="7"', null, null);
 
 
-echo "users: ";
+echo "<br> users: ";
 echo "<pre>";
 print_r($obj->get_result());
 echo "</pre>";
