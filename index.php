@@ -15,9 +15,10 @@ $obj = new Database();
 
 // Show user by id
 // $obj->sql('SELECT * FROM users');
-$obj->select('users', '*', null, null, 'user_name', '5');
+$obj->select('users', '*', null, null, 'user_name', '2');
 // $obj->select('users', '*', null, 'user_id="7"', null, null);
 
+$obj->pagination('users',null, null, '2');
 
 echo "<br> users: ";
 echo "<pre>";
