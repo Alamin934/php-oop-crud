@@ -66,12 +66,36 @@ class Database{
         }
     }
 
-    public function delete(){
+    public function delete($table, $where = null){
+        if($this->tableExists($table)){
+            $sql = "DELETE FROM $table";
+            if($where != null){
+                $sql.= " WHERE $where";
+            }
 
+            if($this->mysqli->query($sql)){
+                array_push($this->result, $this->mysqli->affected_rows);
+                return true;
+            }else{
+                array_push($this->result, $this->mysqli->error);
+                return false;
+            }
+        }
     }
 
     public function select(){
 
+    }
+
+    public function sql($sql){
+        $query = $this->mysqli->query($sql);
+        if($query){
+            $this->result = $query->fetch_all(MYSQLI_ASSOC);
+            return true;
+        }else{
+            array_push($this->result, $this->mysqli->error);
+            return false;
+        }
     }
 
     private function tableExists($table){
